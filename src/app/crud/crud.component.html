@@ -1,0 +1,78 @@
+<section class="vh-100" style="background-color: #eee;">
+  <div class="container py-5 h-150">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-9 col-xl-10">
+        <div class="card rounded-3">
+          <div class="card-body p-5">
+            <h2>CRUD SYSTEM</h2>
+            <div class="container">
+                  <div class="row p-3">
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control mb-4" [(ngModel)] = "newData.name" placeholder="Product Name" required>
+                      </div>
+                      <div class="col-sm-10">
+                          <input type="text" class="form-control mb-4" [(ngModel)] = "newData.category" placeholder="Product Category" required>
+                      </div>
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control mb-4" [(ngModel)] = "newData.price" placeholder="Product Price" required>
+                      </div>
+                      <div class="col-sm-10">
+                        <textarea type="textarea" class="form-control mb-4" [(ngModel)] = "newData.description" placeholder="Product Description" required></textarea>
+                      </div>
+                      <div class="d-flex">
+                        <div class="col-md-2 ms-1">
+                            <button class="btn btn-primary" (click)="addData()">Add Product</button>
+                        </div>
+                        <div class="col-sm-1">
+                            <button class="btn btn-primary" (click)="clearData()">Clear</button>
+                        </div>
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+                      <div class="col-sm-11">
+                              @if(isAval)
+                              {
+                                  <table class="table">
+                                      <thead>
+                                          <tr>
+                                              <th scope="col">Name</th>
+                                              <th scope="col">Category</th>
+                                              <th scope="col">Price</th>
+                                              <th scope="col">Description</th>
+                                              <th scope="col">Actions</th>
+                                          </tr>
+                                      </thead>
+                                          <tbody class="table-group-divider">
+                                              @for (x of data; track $index)
+                                              {
+                                                  <tr>
+                                                      <td>{{x.name}}</td>
+                                                      <td>{{x.category}}</td>
+                                                      <td>{{x.price}}</td>
+                                                      <td>{{x.description}}</td>
+                                                      <td><button class="btn btn-danger" (click)="updateData(x,newData.name, newData.category, newData.price,newData.description) ">{{buttonText()}}</button></td>
+                                                      <td><button class="btn btn-danger" (click)="removeData(x)">Remove</button></td>
+                                                  </tr>
+                                              }
+                                          </tbody>
+                                  </table>
+                              }
+                              @else {
+                                  <div class="alert alert-warning" role="alert">
+                                      No Data available
+                                  </div>
+                              }
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
