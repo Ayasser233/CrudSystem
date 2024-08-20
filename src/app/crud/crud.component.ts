@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { CommonModule } from '@angular/common';
+
 
 interface crud {
   name: string;
@@ -12,7 +14,7 @@ interface crud {
 @Component({
   selector: 'app-crud',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './crud.component.html',
   styleUrl: './crud.component.css',
 })
@@ -21,6 +23,8 @@ export class CrudComponent {
   newData: crud = { name: '', category: '', price: '', description: '' };
   isAval: boolean = false;
   isEditing = false;
+  searchText: string = '';
+
 
   ngOnInit(): void {
     const savedData = localStorage.getItem('data');
@@ -69,29 +73,34 @@ export class CrudComponent {
     this.newData = { name: '', category: '', price: '', description: '' };
   }
 
-  updateData(data: crud , newName: string, newCategory:string, newPrice:string, newDescription: string):
-  { name: string;
+  updateData(
+    data: crud,
+    newName: string,
+    newCategory: string,
+    newPrice: string,
+    newDescription: string
+  ): {
+    name: string;
     category: string;
     price: string;
-    description: string; } | void  {
-    const index = this.data.findIndex(d => d === data);
+    description: string;
+  } | void {
+    const index = this.data.findIndex((d) => d === data);
     const editedName = newName.trim();
     const editedCate = newCategory.trim();
     const editedPrice = newPrice.trim();
     const editedDesc = newDescription.trim();
 
-
-    if(index !== -1){
-      if(editedName !== ""){
+    if (index !== -1) {
+      if (editedName !== '') {
         this.data[index] = {
           ...data,
           name: editedName,
           description: editedDesc || '',
           price: editedPrice || '',
-          category: editedCate || ''
+          category: editedCate || '',
         };
-      }
-      else{
+      } else {
         this.isEditing = true;
 
         newName = this.data[this.data.indexOf(data)].name;
@@ -100,21 +109,31 @@ export class CrudComponent {
         newCategory = this.data[index].category || '';
         console.log(newName);
 
-        return this.newData = { name: newName, category:newCategory, price:newPrice, description: newDescription}
-
+        return (this.newData = {
+          name: newName,
+          category: newCategory,
+          price: newPrice,
+          description: newDescription,
+        });
       }
     }
-    this.newData = {name: '', category: '', price: '', description: ''};
+    this.newData = { name: '', category: '', price: '', description: '' };
     this.isEditing = false;
-    Swal.fire(
-      'Updated!',
-      'Your data has been updated.',
-      'success'
-  );
-
+    Swal.fire('Updated!', 'Your data has been updated.', 'success');
   }
 
   buttonText() {
     return this.isEditing ? 'Update Product' : 'EDIT';
-}
+  }
+  filteredData() {
+    if (!this.searchText.trim()) {
+      return this.data;
+    }
+    return this.data.filter(item =>
+      item.name.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      item.category.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      item.price.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      item.description.toLowerCase().includes(this.searchText.toLowerCase())
+    );
+  }
 }
